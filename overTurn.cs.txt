@@ -1,0 +1,92 @@
+using UnityEngine;
+using UnityEngine.UI; // For accessing UI elements like Button
+
+public class overTurn : MonoBehaviour
+{
+    public GameObject objectToRotate; // Reference to the object you want to rotate
+    public float rotationAngle = 90f; // Angle to rotate (in degrees)
+    public Button rotateButton; // Button to trigger the rotation
+    public float rotationSpeed = 2f; // Speed at which the object rotates
+
+    private Quaternion targetRotation; // The target rotation we want to reach
+    private bool isRotating = false; // To check if the object is currently rotating
+
+    private void Start()
+    {
+        if (rotateButton != null)
+        {
+            rotateButton.onClick.AddListener(StartRotating);
+        }
+    }
+
+    private void Update()
+    {
+        // Smoothly rotate towards the target rotation
+        if (isRotating)
+        {
+            objectToRotate.transform.rotation = Quaternion.Lerp(objectToRotate.transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+
+            // Check if we have reached the target rotation (allowing for small float inaccuracies)
+            if (Quaternion.Angle(objectToRotate.transform.rotation, targetRotation) < 0.1f)
+            {
+                objectToRotate.transform.rotation = targetRotation;
+                isRotating = false; // Stop rotating when target rotation is reached
+            }
+        }
+    }
+
+    private void StartRotating()
+    {
+        // Set the target rotation based on the current rotation and the desired angle
+        targetRotation = objectToRotate.transform.rotation * Quaternion.Euler(rotationAngle, 0, 0); // Rotate around the Y-axis
+
+        // Start the rotation
+        isRotating = true;
+    }
+}
+using UnityEngine;
+using UnityEngine.UI; // For accessing UI elements like Button
+
+public class overTurn : MonoBehaviour
+{
+    public GameObject objectToRotate; // Reference to the object you want to rotate
+    public float rotationAngle = 90f; // Angle to rotate (in degrees)
+    public Button rotateButton; // Button to trigger the rotation
+    public float rotationSpeed = 2f; // Speed at which the object rotates
+
+    private Quaternion targetRotation; // The target rotation we want to reach
+    private bool isRotating = false; // To check if the object is currently rotating
+
+    private void Start()
+    {
+        if (rotateButton != null)
+        {
+            rotateButton.onClick.AddListener(StartRotating);
+        }
+    }
+
+    private void Update()
+    {
+        // Smoothly rotate towards the target rotation
+        if (isRotating)
+        {
+            objectToRotate.transform.rotation = Quaternion.Lerp(objectToRotate.transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+
+            // Check if we have reached the target rotation (allowing for small float inaccuracies)
+            if (Quaternion.Angle(objectToRotate.transform.rotation, targetRotation) < 0.1f)
+            {
+                objectToRotate.transform.rotation = targetRotation;
+                isRotating = false; // Stop rotating when target rotation is reached
+            }
+        }
+    }
+
+    private void StartRotating()
+    {
+        // Set the target rotation based on the current rotation and the desired angle
+        targetRotation = objectToRotate.transform.rotation * Quaternion.Euler(rotationAngle, 0, 0); // Rotate around the Y-axis
+
+        // Start the rotation
+        isRotating = true;
+    }
+}

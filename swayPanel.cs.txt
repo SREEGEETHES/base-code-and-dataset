@@ -1,0 +1,86 @@
+using UnityEngine;
+using UnityEngine.UI; // For accessing UI elements like Button
+
+public class swatPanel: MonoBehaviour
+{
+    // Remove the public reference to objectToMove
+    // public GameObject objectToMove; // Reference to the object you want to move 
+    public float moveDistanceInCm = 10f; // Distance to move in centimeters
+    public Button moveButton; // Button to trigger the movement
+    public float moveSpeed = 2f; // Speed at which the object moves
+
+    private Vector3 targetPosition; // The target position to move towards
+    private bool isMoving = false; // To check if the object is currently moving
+
+    // Enum to represent direction types
+    public enum Direction
+    {
+        Left,
+        Right,
+        Up,
+        Down,
+        Forward,
+        Backward
+    }
+
+    public Direction moveDirection = Direction.Right; // Current direction of movement
+
+    private void Start()
+    {
+        // Set objectToMove to the GameObject this script is attached to
+        GameObject objectToMove = gameObject;  // Use the GameObject the script is attached to
+
+        if (moveButton != null)
+        {
+            moveButton.onClick.AddListener(StartMoving);
+        }
+    }
+
+    private void Update()
+    {
+        // Smoothly move towards the target position
+        if (isMoving)
+        {
+            gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, targetPosition, Time.deltaTime * moveSpeed);
+
+            // Check if we have reached the target position (allowing for small float inaccuracies)
+            if (Vector3.Distance(gameObject.transform.position, targetPosition) < 0.01f)
+            {
+                gameObject.transform.position = targetPosition;
+                isMoving = false; // Stop moving when target is reached
+            }
+        }
+    }
+
+    private void StartMoving()
+    {
+        // Convert centimeters to meters (Unity uses meters)
+        float moveDistanceInMeters = moveDistanceInCm / 100f;
+
+        // Set the target position based on the selected direction
+        switch (moveDirection)
+        {
+            case Direction.Left:
+                targetPosition = gameObject.transform.position + new Vector3(-moveDistanceInMeters, 0, 0); // Move left
+                break;
+            case Direction.Right:
+                targetPosition = gameObject.transform.position + new Vector3(moveDistanceInMeters, 0, 0); // Move right
+                break;
+            case Direction.Up:
+                targetPosition = gameObject.transform.position + new Vector3(0, moveDistanceInMeters, 0); // Move up
+                break;
+            case Direction.Down:
+                targetPosition = gameObject.transform.position + new Vector3(0, -moveDistanceInMeters, 0); // Move down
+                break;
+            case Direction.Forward:
+                targetPosition = gameObject.transform.position + new Vector3(0, 0, moveDistanceInMeters); // Move forward
+                break;
+            case Direction.Backward:
+                targetPosition = gameObject.transform.position + new Vector3(0, 0, -moveDistanceInMeters); // Move backward
+                break;
+        }
+
+        // Start the movement
+        isMoving = true;
+    }
+}

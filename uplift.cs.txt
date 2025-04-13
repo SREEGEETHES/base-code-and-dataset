@@ -1,0 +1,58 @@
+using UnityEngine;
+using UnityEngine.UI; // For accessing UI elements like Button
+
+public class uplift : MonoBehaviour
+{
+    public GameObject objectToRotate; // Reference to the object you want to rotate
+    public float rotationAngle = 10f; // Angle to rotate (in degrees)
+    public Button rotateButton; // Button to trigger the rotation
+    public float rotationSpeed = 2f; // Speed at which the object rotates
+
+    private Quaternion targetRotation; // The target rotation we want to reach
+    private bool isRotating = false; // To check if the object is currently rotating
+
+    // Enum to represent rotation direction
+    public enum RotationDirection
+    {
+        Clockwise,
+        CounterClockwise
+    }
+
+    public RotationDirection rotationDirection = RotationDirection.Clockwise; // Current direction of rotation
+
+    private void Start()
+    {
+        if (rotateButton != null)
+        {
+            rotateButton.onClick.AddListener(StartRotating);
+        }
+    }
+
+    private void Update()
+    {
+        // Smoothly rotate towards the target rotation
+        if (isRotating)
+        {
+            objectToRotate.transform.rotation = Quaternion.Lerp(objectToRotate.transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+
+            // Check if we have reached the target rotation (allowing for small float inaccuracies)
+            if (Quaternion.Angle(objectToRotate.transform.rotation, targetRotation) < 0.1f)
+            {
+                objectToRotate.transform.rotation = targetRotation;
+                isRotating = false; // Stop rotating when target rotation is reached
+            }
+        }
+    }
+
+    private void StartRotating()
+    {
+        // Set the direction modifier based on the selected rotation direction
+        float directionMultiplier = (rotationDirection == RotationDirection.Clockwise) ? 1f : -1f;
+
+        // Set the target rotation based on the current rotation and the desired angle
+        targetRotation = objectToRotate.transform.rotation * Quaternion.Euler(0,0, -rotationAngle * directionMultiplier); // Rotate around the Y-axis
+
+        // Start the rotation
+        isRotating = true;
+    }
+}

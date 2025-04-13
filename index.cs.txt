@@ -1,0 +1,30 @@
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;  // For scene management
+
+public class index : MonoBehaviour
+{
+    public Button buttonScene1; // Button to navigate to Scene 1
+    public Button buttonScene2; // Button to navigate to Scene 2
+    public Button buttonScene3; // Button to navigate to Scene 3
+    public Button buttonScene4; // Button to navigate to Scene 4
+
+    private void Start()
+    {
+        // Check if the buttons are assigned
+        if (buttonScene1 != null)
+            buttonScene1.onClick.AddListener(() => LoadScene("slide - overTurn")); // Replace "Scene1" with the name of your scene
+        if (buttonScene2 != null)
+            buttonScene2.onClick.AddListener(() => LoadScene("uplift")); // Replace "Scene2" with the name of your scene
+        if (buttonScene3 != null)
+            buttonScene3.onClick.AddListener(() => LoadScene("sway")); // Replace "Scene3" with the name of your scene
+        if (buttonScene4 != null)
+            buttonScene4.onClick.AddListener(() => LoadScene("TestXR_movementTrial")); // Replace "Scene4" with the name of your scene
+    }
+
+    // Function to load a scene by name
+    private void LoadScene(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName);
+    }
+}
